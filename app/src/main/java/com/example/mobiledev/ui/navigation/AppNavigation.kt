@@ -17,6 +17,7 @@ import com.example.mobiledev.data.model.UserRole
 import com.example.mobiledev.ui.auth.*
 import com.example.mobiledev.ui.merchant.AddBagScreen
 import com.example.mobiledev.ui.merchant.MyBagsScreen
+import com.example.mobiledev.ui.merchant.MyStoreScreen
 
 object Routes {
     const val LOGIN = "login"
@@ -25,6 +26,7 @@ object Routes {
     const val CUSTOMER_HOME = "customer_home"
     const val MERCHANT_HOME = "merchant_home"
     const val ADD_BAG = "add_bag"
+    const val MY_STORE = "my_store"
 }
 
 @Composable
@@ -89,12 +91,17 @@ fun AppNavigation(authViewModel: AuthViewModel) {
         composable(Routes.MERCHANT_HOME) {
             MyBagsScreen(
                 onAddBag = { navController.navigate(Routes.ADD_BAG) },
+                onOpenStore = { navController.navigate(Routes.MY_STORE) },
                 onLogout = authViewModel::logout
             )
         }
         // Handelaar: "Pakket aanmaken" (H3 + H4)
         composable(Routes.ADD_BAG) {
             AddBagScreen(onSaved = { navController.popBackStack() })
+        }
+        // Handelaar: "Mijn winkel" (H1 + H2)
+        composable(Routes.MY_STORE) {
+            MyStoreScreen(onSaved = { navController.popBackStack() })
         }
     }
 }

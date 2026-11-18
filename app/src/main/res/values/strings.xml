@@ -73,4 +73,28 @@
     <string name="error_photo_unreadable">Deze foto kon niet gelezen worden. Kies een andere.</string>
     <string name="error_no_store">Maak eerst je winkel aan (Mijn winkel)</string>
     <string name="error_not_logged_in">Je bent niet meer ingelogd</string>
+
+    <!-- Handelaar: Mijn winkel (H1 + H2, week 2) -->
+    <string name="store_title">Mijn winkel</string>
+    <string name="action_my_store">Mijn winkel</string>
+    <string name="field_store_name">Naam van de winkel</string>
+    <string name="store_category_label">Categorie</string>
+    <string name="category_baker">Bakker</string>
+    <string name="category_supermarket">Supermarkt</string>
+    <string name="category_restaurant">Restaurant</string>
+    <string name="category_butcher">Slager</string>
+    <string name="category_greengrocer">Groenten &amp; fruit</string>
+    <string name="category_other">Andere</string>
+    <string name="store_map_hint">Tik op de kaart om je winkel te plaatsen. Het adres wordt automatisch ingevuld.</string>
+    <string name="store_geocoding">Adres opzoeken…</string>
+    <string name="field_store_address">Straat en huisnummer</string>
+    <string name="field_store_postcode">Postcode</string>
+    <string name="field_store_city">Gemeente</string>
+    <string name="action_save_store">Winkel opslaan</string>
+    <string name="error_store_name_empty">Vul de naam van je winkel in</string>
+    <string name="error_store_category_missing">Kies een categorie</string>
+    <string name="error_store_pin_missing">Tik op de kaart om je winkel te plaatsen</string>
+    <string name="error_store_address_empty">Vul straat en huisnummer in</string>
+    <string name="error_store_city_empty">Vul de gemeente in</string>
+    <string name="error_address_not_found">Geen adres gevonden. Vul het zelf in.</string>
 </resources>
