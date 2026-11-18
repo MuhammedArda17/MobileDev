@@ -33,4 +33,44 @@
     <string name="role_merchant">Handelaar</string>
     <string name="action_register">Registreer</string>
     <string name="action_to_login">Heb je al een account? Log in</string>
+
+    <!-- Handelaar: Mijn pakketten (H5) -->
+    <string name="my_bags_title">Mijn pakketten</string>
+    <string name="my_bags_empty">Je hebt nog geen pakketten.\nTik op \"Nieuw pakket\" om er een aan te bieden.</string>
+    <string name="action_new_bag">Nieuw pakket</string>
+    <string name="action_logout">Uitloggen</string>
+    <string name="price_format">€ %1$.2f</string>
+    <string name="bag_pickup_window">Ophalen: %1$s – %2$s</string>
+    <string name="bag_stock">Nog %1$d over · %2$d gereserveerd</string>
+    <string name="bag_offline">Offline</string>
+    <string name="bag_photo_description">Foto van het pakket</string>
+    <string name="error_load_bags">Je pakketten konden niet geladen worden</string>
+
+    <!-- Handelaar: Pakket aanmaken (H3 + H4) -->
+    <string name="add_bag_title">Nieuw pakket</string>
+    <string name="bag_photo_pick">Tik om een foto te kiezen</string>
+    <string name="field_bag_title">Titel</string>
+    <string name="field_bag_description">Beschrijving</string>
+    <string name="field_bag_original_value">Originele waarde (€)</string>
+    <string name="field_bag_price">Prijs (€)</string>
+    <string name="field_bag_quantity">Aantal pakketten</string>
+    <string name="bag_pickup_start">Ophalen vanaf: %1$s</string>
+    <string name="bag_pickup_end">Ophalen tot: %1$s</string>
+    <string name="time_not_set">--:--</string>
+    <string name="action_save_bag">Pakket opslaan</string>
+    <string name="action_ok">OK</string>
+    <string name="action_cancel">Annuleren</string>
+    <string name="error_bag_photo_missing">Kies een foto van het pakket</string>
+    <string name="error_bag_title_empty">Vul een titel in</string>
+    <string name="error_bag_description_empty">Vul een beschrijving in</string>
+    <string name="error_bag_original_value_invalid">Vul een geldige originele waarde in</string>
+    <string name="error_bag_price_invalid">Vul een geldige prijs in</string>
+    <string name="error_bag_price_too_high">De prijs moet lager zijn dan de originele waarde</string>
+    <string name="error_bag_quantity_invalid">Het aantal moet minstens 1 zijn</string>
+    <string name="error_bag_pickup_missing">Kies een begin- en einduur om op te halen</string>
+    <string name="error_bag_pickup_order">Het einduur moet na het beginuur liggen</string>
+    <string name="error_bag_pickup_past">Het einduur is vandaag al voorbij</string>
+    <string name="error_photo_unreadable">Deze foto kon niet gelezen worden. Kies een andere.</string>
+    <string name="error_no_store">Maak eerst je winkel aan (Mijn winkel)</string>
+    <string name="error_not_logged_in">Je bent niet meer ingelogd</string>
 </resources>

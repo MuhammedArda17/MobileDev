@@ -15,6 +15,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.mobiledev.data.model.UserRole
 import com.example.mobiledev.ui.auth.*
+import com.example.mobiledev.ui.merchant.AddBagScreen
+import com.example.mobiledev.ui.merchant.MyBagsScreen
 
 object Routes {
     const val LOGIN = "login"
@@ -22,6 +24,7 @@ object Routes {
     const val FORGOT = "forgot"
     const val CUSTOMER_HOME = "customer_home"
     const val MERCHANT_HOME = "merchant_home"
+    const val ADD_BAG = "add_bag"
 }
 
 @Composable
@@ -82,8 +85,16 @@ fun AppNavigation(authViewModel: AuthViewModel) {
         composable(Routes.CUSTOMER_HOME) {
             PlaceholderHome("Klant", authViewModel::logout)
         }
+        // Handelaar: startscherm = "Mijn pakketten" (H5)
         composable(Routes.MERCHANT_HOME) {
-            PlaceholderHome("Handelaar", authViewModel::logout)
+            MyBagsScreen(
+                onAddBag = { navController.navigate(Routes.ADD_BAG) },
+                onLogout = authViewModel::logout
+            )
+        }
+        // Handelaar: "Pakket aanmaken" (H3 + H4)
+        composable(Routes.ADD_BAG) {
+            AddBagScreen(onSaved = { navController.popBackStack() })
         }
     }
 }
