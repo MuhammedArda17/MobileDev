@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    // Profielen: iedereen die ingelogd is mag lezen, je wijzigt enkel je eigen profiel
+    match /users/{userId} {
+      allow read: if signedIn();
+      allow write: if signedIn() && request.auth.uid == userId;
+    }
+
+    // Winkels (week 2): enkel de eigenaar mag zijn winkel aanmaken/wijzigen
+    match /stores/{storeId} {
+      allow read: if signedIn();
+      allow create: if signedIn() && request.resource.data.ownerId == request.auth.uid;
+      allow update, delete: if signedIn() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Pakketten (week 3)
+    match /bags/{bagId} {
+      allow read: if signedIn();
+      // je mag enkel een pakket aanmaken op je eigen naam
+      allow create: if signedIn() && request.resource.data.ownerId == request.auth.uid;
+      // de handelaar mag alles aanpassen; een klant mag bij reserveren (week 5)
+      // ENKEL quantityLeft aanpassen
+      allow update: if signedIn() && (
+        resource.data.ownerId == request.auth.uid ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['quantityLeft'])
+      );
+      allow delete: if signedIn() && resource.data.ownerId == request.auth.uid;
+    }
+
+    // Reservaties (week 5): voorlopig enkel "ingelogd", later strenger maken
+    match /reservations/{reservationId} {
+      allow read, write: if signedIn();
+    }
+  }
+}
