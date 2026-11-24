@@ -8,6 +8,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,6 +33,14 @@ fun MyBagsScreen(
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
     val errorRes = state.errorRes
+
+    // H1: nog geen winkel? Dan eerst naar "Mijn winkel".
+    LaunchedEffect(state.needsStore) {
+        if (state.needsStore) {
+            viewModel.onStoreRedirectHandled()
+            onOpenStore()
+        }
+    }
 
     Scaffold(
         floatingActionButton = {

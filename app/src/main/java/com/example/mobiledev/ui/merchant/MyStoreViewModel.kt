@@ -9,8 +9,11 @@ import com.example.mobiledev.data.model.LatLon
 import com.example.mobiledev.data.model.StoreCategory
 import com.example.mobiledev.data.repository.GeocodingError
 import com.example.mobiledev.data.repository.GeocodingRepository
+import com.example.mobiledev.data.repository.LocationError
+import com.example.mobiledev.data.repository.LocationRepository
 import com.example.mobiledev.data.repository.StoreError
 import com.example.mobiledev.data.repository.StoreRepository
+import com.example.mobiledev.ui.location.LocationPermissionResult
 import com.example.mobiledev.util.NetworkUtils
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +29,8 @@ class MyStoreViewModel(application: Application) : AndroidViewModel(application)
     private val geocodingRepo = GeocodingRepository(
         AppDatabase.getInstance(application).cachedAddressDao()
     )
+
+    private val locationRepo = LocationRepository(application)
 
     private val _state = MutableStateFlow(MyStoreUiState())
     val state: StateFlow<MyStoreUiState> = _state.asStateFlow()
@@ -71,7 +76,7 @@ class MyStoreViewModel(application: Application) : AndroidViewModel(application)
 
     /** H1 + H2: pin gezet -> adres automatisch opzoeken. */
     fun onMapTap(point: LatLon) {
-        _state.update { it.copy(pin = point, mapCenter = point, errorRes = null) }
+        _state.update { it.copy(pin = point, mapCenter = point, errorRes = null, infoRes = null) }
 
         geocodeJob?.cancel() // vorige zoekopdracht stoppen als je snel opnieuw tikt
         geocodeJob = viewModelScope.launch {
@@ -92,6 +97,62 @@ class MyStoreViewModel(application: Application) : AndroidViewModel(application)
                     GeocodingError.NotFound -> R.string.error_address_not_found
                 }
                 _state.update { it.copy(isGeocoding = false, errorRes = message) }
+            }
+        }
+    }
+
+    // --- "Gebruik mijn locatie" ---
+
+    /** Knop "Gebruik mijn locatie": al toestemming? Meteen zoeken. Anders eerst uitleg tonen. */
+    fun onUseMyLocationClick() {
+        if (locationRepo.hasAnyPermission()) {
+            findMyLocation(precise = locationRepo.hasFinePermission())
+        } else {
+            _state.update { it.copy(showLocationRationale = true, errorRes = null, infoRes = null) }
+        }
+    }
+
+    /** Uitlegvenster gesloten (de gebruiker koos "Toestaan" of "Annuleren"). */
+    fun onLocationRationaleDismiss() = _state.update { it.copy(showLocationRationale = false) }
+
+    /** Antwoord van Android op de permissievraag: alle vier de gevallen afhandelen. */
+    fun onLocationPermissionResult(result: LocationPermissionResult) {
+        when (result) {
+            LocationPermissionResult.PRECISE -> findMyLocation(precise = true)
+            LocationPermissionResult.APPROXIMATE -> findMyLocation(precise = false)
+            LocationPermissionResult.DENIED ->
+                _state.update { it.copy(errorRes = R.string.error_location_denied) }
+            LocationPermissionResult.PERMANENTLY_DENIED -> _state.update {
+                it.copy(errorRes = R.string.error_location_denied_permanently, locationPermanentlyDenied = true)
+            }
+        }
+    }
+
+    /**
+     * Precieze locatie: pin meteen zetten + adres opzoeken (zoals bij een tik op de kaart).
+     * Benaderde locatie (kan honderden meters afwijken): enkel de kaart verplaatsen,
+     * de handelaar zet de pin zelf.
+     */
+    private fun findMyLocation(precise: Boolean) {
+        _state.update {
+            it.copy(isLocating = true, locationPermanentlyDenied = false, errorRes = null, infoRes = null)
+        }
+        viewModelScope.launch {
+            try {
+                val point = locationRepo.getCurrentLocation()
+                _state.update { it.copy(isLocating = false) }
+                if (precise) {
+                    onMapTap(point)
+                } else {
+                    _state.update { it.copy(mapCenter = point, infoRes = R.string.info_location_approximate) }
+                }
+            } catch (e: LocationError) {
+                val message = when (e) {
+                    LocationError.NoPermission -> R.string.error_location_denied
+                    LocationError.Disabled -> R.string.error_location_disabled
+                    LocationError.Unavailable -> R.string.error_location_unavailable
+                }
+                _state.update { it.copy(isLocating = false, errorRes = message) }
             }
         }
     }

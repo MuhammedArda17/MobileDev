@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.example.mobiledev.R
 import com.example.mobiledev.data.model.Bag
 import com.example.mobiledev.data.repository.BagRepository
+import com.example.mobiledev.data.repository.StoreError
+import com.example.mobiledev.data.repository.StoreRepository
 import com.example.mobiledev.util.ImageUtils
 import com.google.firebase.Timestamp
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +24,8 @@ import java.util.Locale
 
 /** ViewModel voor "Mijn pakketten" (H5): realtime lijst van de eigen pakketten. */
 class MyBagsViewModel(
-    private val repo: BagRepository = BagRepository()
+    private val repo: BagRepository = BagRepository(),
+    private val storeRepo: StoreRepository = StoreRepository()
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(MyBagsUiState())
@@ -32,6 +35,30 @@ class MyBagsViewModel(
     private val photoCache = mutableMapOf<String, ImageBitmap?>()
 
     init {
+        checkStore()
+        observeBags()
+    }
+
+    /**
+     * H1: een handelaar zonder winkel kan nog geen pakketten aanbieden.
+     * Daarom sturen we hem bij het openen meteen naar "Mijn winkel".
+     * Dit gebeurt maar één keer per ViewModel: komt hij terug zonder op te slaan,
+     * dan blijft hij gewoon op "Mijn pakketten".
+     */
+    private fun checkStore() = viewModelScope.launch {
+        try {
+            if (storeRepo.getMyStore() == null) {
+                _state.update { it.copy(needsStore = true) }
+            }
+        } catch (e: StoreError) {
+            // Geen internet of niet ingelogd: niet doorsturen, de lijst toont zelf een melding
+        }
+    }
+
+    /** Het scherm heeft de doorverwijzing uitgevoerd. */
+    fun onStoreRedirectHandled() = _state.update { it.copy(needsStore = false) }
+
+    private fun observeBags() {
         viewModelScope.launch {
             repo.observeMyBags()
                 .map { bags -> bags.map { it.toListItem() } }

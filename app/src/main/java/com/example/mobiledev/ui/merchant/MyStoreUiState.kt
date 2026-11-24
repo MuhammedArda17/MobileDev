@@ -17,7 +17,12 @@ data class MyStoreUiState(
     val isGeocoding: Boolean = false,     // adres aan het opzoeken
     val isSaving: Boolean = false,
     @StringRes val errorRes: Int? = null,
-    val isSaved: Boolean = false
+    @StringRes val infoRes: Int? = null,  // neutrale melding (geen fout), bv. "benaderde locatie"
+    val isSaved: Boolean = false,
+    // --- "Gebruik mijn locatie" ---
+    val showLocationRationale: Boolean = false,      // uitleg tonen VOOR we de permissie vragen
+    val isLocating: Boolean = false,                 // locatie aan het zoeken
+    val locationPermanentlyDenied: Boolean = false   // knop "Open instellingen" tonen
 ) {
     companion object {
         val DEFAULT_CENTER = LatLon(51.2194, 4.4025) // Antwerpen

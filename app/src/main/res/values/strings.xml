@@ -97,4 +97,17 @@
     <string name="error_store_address_empty">Vul straat en huisnummer in</string>
     <string name="error_store_city_empty">Vul de gemeente in</string>
     <string name="error_address_not_found">Geen adres gevonden. Vul het zelf in.</string>
+
+    <!-- Locatie (Mijn winkel, later ook K1) -->
+    <string name="action_use_my_location">Gebruik mijn locatie</string>
+    <string name="location_finding">Locatie zoeken…</string>
+    <string name="location_rationale_title">Je locatie gebruiken?</string>
+    <string name="location_rationale_text">We gebruiken je locatie enkel om de kaart naar je winkel te verplaatsen en de pin te zetten. Je kan de pin ook altijd zelf op de kaart zetten.</string>
+    <string name="action_allow">Toestaan</string>
+    <string name="action_open_settings">Open instellingen</string>
+    <string name="info_location_approximate">Je deelt enkel een benaderde locatie. Tik op de kaart om de pin precies op je winkel te zetten.</string>
+    <string name="error_location_denied">Geen toestemming voor je locatie. Tik zelf op de kaart om je winkel te plaatsen.</string>
+    <string name="error_location_denied_permanently">Locatie is uitgeschakeld voor deze app. Zet ze aan in de instellingen of tik zelf op de kaart.</string>
+    <string name="error_location_disabled">Locatie staat uit op je toestel. Zet ze aan of tik zelf op de kaart.</string>
+    <string name="error_location_unavailable">Je locatie kon niet bepaald worden. Tik zelf op de kaart.</string>
 </resources>

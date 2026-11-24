@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
@@ -19,6 +20,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.mobiledev.R
 import com.example.mobiledev.data.model.StoreCategory
+import com.example.mobiledev.ui.location.openAppSettings
+import com.example.mobiledev.ui.location.rememberLocationPermissionRequest
 import com.example.mobiledev.ui.map.OsmMap
 
 /** Scherm "Mijn winkel" (H1 + H2): naam, categorie, pin op de kaart, automatisch adres. */
@@ -28,6 +31,29 @@ fun MyStoreScreen(
     viewModel: MyStoreViewModel = viewModel()
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val context = LocalContext.current
+    // Permissie vragen kan enkel vanuit de UI; het antwoord gaat naar de ViewModel
+    val requestLocationPermission = rememberLocationPermissionRequest(viewModel::onLocationPermissionResult)
+
+    // Eerst uitleg, pas daarna de permissie vragen (opgave: "Vraag pas na uitleg")
+    if (state.showLocationRationale) {
+        AlertDialog(
+            onDismissRequest = viewModel::onLocationRationaleDismiss,
+            title = { Text(stringResource(R.string.location_rationale_title)) },
+            text = { Text(stringResource(R.string.location_rationale_text)) },
+            confirmButton = {
+                TextButton(onClick = {
+                    viewModel.onLocationRationaleDismiss()
+                    requestLocationPermission()
+                }) { Text(stringResource(R.string.action_allow)) }
+            },
+            dismissButton = {
+                TextButton(onClick = viewModel::onLocationRationaleDismiss) {
+                    Text(stringResource(R.string.action_cancel))
+                }
+            }
+        )
+    }
 
     LaunchedEffect(state.isSaved) {
         if (state.isSaved) onSaved()
@@ -74,6 +100,19 @@ fun MyStoreScreen(
 
         // Kaart: tik om de pin te zetten
         Text(stringResource(R.string.store_map_hint), style = MaterialTheme.typography.bodyMedium)
+        OutlinedButton(
+            onClick = viewModel::onUseMyLocationClick,
+            enabled = !state.isLocating,
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            if (state.isLocating) {
+                CircularProgressIndicator(Modifier.size(16.dp), strokeWidth = 2.dp)
+                Spacer(Modifier.width(8.dp))
+                Text(stringResource(R.string.location_finding))
+            } else {
+                Text(stringResource(R.string.action_use_my_location))
+            }
+        }
         OsmMap(
             center = state.mapCenter,
             pin = state.pin,
@@ -117,8 +156,17 @@ fun MyStoreScreen(
             )
         }
 
+        state.infoRes?.let {
+            Text(stringResource(it), style = MaterialTheme.typography.bodySmall)
+        }
         state.errorRes?.let {
             Text(stringResource(it), color = MaterialTheme.colorScheme.error)
+        }
+        // Definitief geweigerd: enkel nog via de instellingen aan te zetten
+        if (state.locationPermanentlyDenied) {
+            TextButton(onClick = { openAppSettings(context) }) {
+                Text(stringResource(R.string.action_open_settings))
+            }
         }
 
         Button(

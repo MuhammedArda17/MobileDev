@@ -20,5 +20,6 @@ data class BagListItem(
 data class MyBagsUiState(
     val isLoading: Boolean = true,
     val bags: List<BagListItem> = emptyList(),
-    @StringRes val errorRes: Int? = null
+    @StringRes val errorRes: Int? = null,
+    val needsStore: Boolean = false // nieuwe handelaar zonder winkel -> eerst naar "Mijn winkel"
 )

@@ -9,7 +9,8 @@ service cloud.firestore {
     // Profielen: iedereen die ingelogd is mag lezen, je wijzigt enkel je eigen profiel
     match /users/{userId} {
       allow read: if signedIn();
-      allow write: if signedIn() && request.auth.uid == userId;
+      allow create, update: if signedIn() && request.auth.uid == userId;
+      allow delete: if false; // een profiel wordt nooit verwijderd
     }
 
     // Winkels (week 2): enkel de eigenaar mag zijn winkel aanmaken/wijzigen
