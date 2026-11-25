@@ -88,6 +88,13 @@ class BagRepository(
             }
     }
 
+    /** K3 + K5: realtime alle actieve pakketten van alle winkels. */
+    fun observeAvailableBags(): Flow<List<Bag>> =
+        bags
+            .whereEqualTo("active", true)
+            .snapshots() // nieuwe lijst bij elke wijziging (bv. iemand reserveert het laatste pakket)
+            .map { snapshot -> snapshot.toObjects(Bag::class.java) }
+
     private fun mapError(e: Exception): BagError = when {
         e is BagError -> e
         e is FirebaseNetworkException -> BagError.Network

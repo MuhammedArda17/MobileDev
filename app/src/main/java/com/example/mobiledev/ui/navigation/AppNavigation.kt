@@ -18,6 +18,7 @@ import com.example.mobiledev.ui.auth.*
 import com.example.mobiledev.ui.merchant.AddBagScreen
 import com.example.mobiledev.ui.merchant.MyBagsScreen
 import com.example.mobiledev.ui.merchant.MyStoreScreen
+import com.example.mobiledev.ui.customer.CustomerHome
 
 object Routes {
     const val LOGIN = "login"
@@ -85,7 +86,7 @@ fun AppNavigation(authViewModel: AuthViewModel) {
             )
         }
         composable(Routes.CUSTOMER_HOME) {
-            PlaceholderHome("Klant", authViewModel::logout)
+            CustomerHome(onLogout = authViewModel::logout)
         }
         // Handelaar: startscherm = "Mijn pakketten" (H5)
         composable(Routes.MERCHANT_HOME) {
@@ -102,16 +103,6 @@ fun AppNavigation(authViewModel: AuthViewModel) {
         // Handelaar: "Mijn winkel" (H1 + H2)
         composable(Routes.MY_STORE) {
             MyStoreScreen(onSaved = { navController.popBackStack() })
-        }
-    }
-}
-
-@Composable
-private fun PlaceholderHome(title: String, onLogout: () -> Unit) {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Startscherm: $title")
-            Button(onClick = onLogout) { Text("Uitloggen") }
         }
     }
 }

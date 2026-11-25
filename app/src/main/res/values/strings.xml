@@ -110,4 +110,27 @@
     <string name="error_location_denied_permanently">Locatie is uitgeschakeld voor deze app. Zet ze aan in de instellingen of tik zelf op de kaart.</string>
     <string name="error_location_disabled">Locatie staat uit op je toestel. Zet ze aan of tik zelf op de kaart.</string>
     <string name="error_location_unavailable">Je locatie kon niet bepaald worden. Tik zelf op de kaart.</string>
+
+    <!-- Klant: tabs + Ontdekken (K1-K3) -->
+    <string name="tab_discover">Ontdekken</string>
+    <string name="tab_map">Kaart</string>
+    <string name="tab_orders">Bestellingen</string>
+    <string name="tab_favorites">Favorieten</string>
+    <string name="coming_soon">Komt binnenkort</string>
+    <string name="discover_title">Pakketten in de buurt</string>
+    <string name="discover_title_in">Pakketten in de buurt van %1$s</string>
+    <string name="discover_location_intro">Gebruik je locatie om pakketten in je buurt te zien, gesorteerd op afstand. Je kan ook zelf een plek op de kaart kiezen.</string>
+    <string name="discover_map_hint">Tik op de kaart om je locatie te kiezen.</string>
+    <string name="discover_empty">Er zijn nu geen pakketten beschikbaar.</string>
+    <string name="action_pick_on_map">Kies op de kaart</string>
+    <string name="action_change_location">Locatie wijzigen</string>
+    <string name="action_done">Klaar</string>
+    <string name="bag_left">Nog %1$d over</string>
+    <string name="distance_km">%1$.1f km</string>
+    <string name="location_rationale_customer">We gebruiken je locatie enkel om pakketten in je buurt te tonen en op afstand te sorteren. Je kan ook zelf een plek op de kaart kiezen.</string>
+    <string name="error_location_denied_customer">Geen toestemming voor je locatie. Kies zelf een plek op de kaart.</string>
+    <string name="error_location_denied_permanently_customer">Locatie is uitgeschakeld voor deze app. Zet ze aan in de instellingen of kies zelf een plek op de kaart.</string>
+    <string name="error_location_disabled_customer">Locatie staat uit op je toestel. Zet ze aan of kies zelf een plek op de kaart.</string>
+    <string name="error_location_unavailable_customer">Je locatie kon niet bepaald worden. Kies zelf een plek op de kaart.</string>
+    <string name="error_municipality_not_found">Gemeente niet gevonden voor deze plek</string>
 </resources>
